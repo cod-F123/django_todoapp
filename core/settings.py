@@ -155,4 +155,5 @@ INTERNAL_IPS = [
 ]
 
 
-LOGIN_URL = '/'
+LOGIN_URL = 'accounts:login_user'
+LOGIN_REDIRECT_URL = 'todo:index'

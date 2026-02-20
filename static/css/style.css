@@ -1,0 +1,45 @@
+
+
+.alert-primary{
+    color: #fff !important;
+    background-color: #0d6efd !important;
+    border-color: #0d6efd !important;
+    font-weight: 500 !important;
+}
+
+.alert-success{
+    color: #fff !important;
+    background-color: #198754 !important;
+    border-color: #198754 !important;
+    font-weight: 500 !important;
+}
+
+.alert-danger , .alert-error{
+    color: #fff !important;
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+    font-weight: 500 !important;
+}
+
+.alert-warning{
+    color: #212529 !important;
+    background-color: #ffc107 !important;
+    border-color: #ffc107 !important;
+    font-weight: 500 !important;
+}
+
+.alert-info{
+    color: #fff !important;
+    background-color: #0dcaf0 !important;
+    border-color: #0dcaf0 !important;
+    font-weight: 500 !important;
+}
+
+.alert-primary .btn-close,.alert-danger .btn-close,.alert-danger .btn-close, .alert-warning .btn-close, .alert-info .btn-close{
+    filter: invert(1) sepia(1) grayscale(1);
+}
+
+
+.min-h-100vh{
+    min-height: 100vh;
+}
