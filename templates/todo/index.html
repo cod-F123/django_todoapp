@@ -4,27 +4,27 @@
 {% block content %}
     <section class="">
             <div class="row min-h-100vh d-flex justify-content-center align-items-center">
-                <div class="col-md-8 col-12">
+                <div class="col-lg-8 col-12">
                     <div class="card shadow">
-                        <div class="card-header">
+                        <div class="card-header d-flex pt-4 justify-content-between">
                             <h2>Todo App</h2>
-                            <ul>
-                            
+                            <ul class="d-flex gap-5" style="list-style-type: none;">
+                                <li><button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-todo-modal">Todo <i class="bi bi-plus-square-fill"></i></button></li>
                             </ul>
                         </div>
-                        <div class="card-body d-flex flex-column align-items-start gap-2">
+                        <div class="card-body todo-items d-flex flex-column-reverse align-items-start gap-2">
                         {% for todo in todos %}
-                            <div class="d-flex justify-content-between w-100 rounded p-2 border border-2 border-primary">
+                            <div id="todo-item-{{todo.id}}" class="d-flex justify-content-between w-100 rounded p-2 border border-2 border-primary">
                                 <div class="d-flex align-items-center gap-2">
-                                    <span>{{todo.title}}</span>
-                                    <span class="badge bg-primary">{{todo.created_at |date:'Y/m/d H:i'}}</span>
+                                    <span class="title" id="item-title-{{todo.id}}">{{todo.title}}</span>
+                                    <!-- <span class="badge bg-primary">{{todo.created_at |date:'Y/m/d H:i'}}</span> -->
                                 </div>
                                 <div class="d-flex align-items-center gap-2">
                                     <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#todo-detail-{{todo.id}}">View</button>
                                     <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#todo-update-{{todo.id}}"><i class="bi bi-pencil"></i></button>
                                     <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#todo-{{todo.id}}"><i class="bi bi-trash"></i></button>
                                     
-                                    <button class="btn btn-sm btn-success"><i class="bi bi-check2"></i></button>
+                                    <!-- <button class="btn btn-sm btn-success set-status" data-index="{{todo.id}}"><i class="bi bi-check2"></i></button> -->
                                 </div>
                             </div>
                         {% empty %}
@@ -52,7 +52,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-danger">yes,Delete</button>
+                    <button type="button" class="btn btn-danger delete-todo" data-bs-dismiss="modal" data-index="{{todo.id}}">yes,Delete</button>
                 </div>
                 </div>
             </div>
@@ -60,25 +60,25 @@
     {% endfor %}
 </section>
 
-<section class="detail-models">
+<section class="detail-modals">
     {% for todo in todos %}
         <div class="modal fade" id="todo-detail-{{todo.id}}" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">{{todo.title}}</h1>
+                    <h1 class="modal-title fs-5" id="detail-title-{{todo.id}}" >{{todo.title}}</h1>
                     <span class="badge text-bg-primary ms-3">{{todo.created_at|date:'Y/m/d H:i'}}</span>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" id="detail-description-{{todo.id}}" >
                     {{todo.description}}
                 </div>
                 <div class="modal-footer">
                     
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     {% if not todo.is_completed %}
-                        <button class="btn btn-success">Completed <i class="bi bi-check2"></i></button>
+                        <button class="btn btn-success set-status" data-index="{{todo.id}}">Completed <i class="bi bi-check2"></i></button>
                     {% else %}
                         <span class="badge badge-lg text-bg-warning">{{todo.do_it_at|date:'Y/m/d H:i'}}</span>
                     {% endif %}
@@ -89,7 +89,7 @@
     {% endfor %}
 </section>
 
-<section class="update-todos">
+<section class="update-modals">
     {% for todo in todos %}
         <div class="modal fade" id="todo-update-{{todo.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -101,18 +101,18 @@
                     <div class="modal-body">
                         <form>
                         <div class="mb-3">
-                            <label for="title" class="col-form-label">Title</label>
-                            <input type="text" class="form-control" id="title" value="{{todo.title}}">
+                            <label for="title-{{todo.id}}" class="col-form-label">Title</label>
+                            <input type="text" class="form-control" id="title-{{todo.id}}" value="{{todo.title}}">
                         </div>
                         <div class="mb-3">
-                            <label for="description" class="col-form-label">Description:</label>
-                            <textarea class="form-control" id="description" >{{todo.description}}</textarea>
+                            <label for="description-{{todo.id}}" class="col-form-label">Description:</label>
+                            <textarea class="form-control" id="description-{{todo.id}}" >{{todo.description}}</textarea>
                         </div>
                         </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary"  data-bs-dismiss="modal" data-bs-toggle="modal">Submit</button>
+                        <button type="button" class="btn btn-primary update-submit" data-index="{{todo.id}}"  data-bs-dismiss="modal" data-bs-toggle="modal">Submit</button>
                     </div>
                 </div>
             </div>
@@ -120,5 +120,278 @@
     {% endfor %}
 
 </section>
+
+
+<div class="modal fade" id="add-todo-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">New Todo</h1>
+        <button type="button" class="btn-close" id="creat-todo-modal-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="add-submit-todo">
+          <div class="mb-3">
+            <label for="title" class="col-form-label">Title:</label>
+            <input type="text" required class="form-control" id="create-title-input">
+          </div>
+          <div class="mb-3">
+            <label for="description" class="col-form-label">Description:</label>
+            <textarea class="form-control" required id="create-description-input"></textarea>
+          </div>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" >Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+
+    const deleteTodo = (id)=>{
+        const detailModalId = `#todo-detail-${id}`;
+        const deleteModalId = `#todo-${id}`;
+        const updateModalId = `#todo-update-${id}`;
+        const todoItemId = `#todo-item-${id}`;
+
+        $(deleteModalId).remove();
+        $(detailModalId).remove();
+        $(updateModalId).remove();
+        $(todoItemId).remove();
+
+        const items = $('.todo-items').children();
+
+        if (items.length == 0){
+            $('.todo-items').append(`
+            <div class="d-flex justify-content-center align-items-center w-100 p-2">
+                <span>No todos found. Please add some todos.</span>
+            </div>
+                `)
+        }
+    };
+
+    const addTodo = (todo)=>{
+        const deleteModals = $('.delete-modals');
+        const detailModals = $('.detail-modals');
+        const updateModals = $('.update-modals');
+        const todoList = $('.todo-items');
+
+        deleteModals.append(`
+        <div class="modal fade" id="todo-${todo.id}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Delete Todo</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this todo?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger delete-todo" data-bs-dismiss="modal" data-index="${todo.id}">yes,Delete</button>
+                </div>
+                </div>
+            </div>
+        </div>
+        `);
+
+        detailModals.append(`
+        <div class="modal fade" id="todo-detail-${todo.id}" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="detail-title-${todo.id}">${todo.title}</h1>
+                    <span class="badge text-bg-primary ms-3">now</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    
+                </div>
+                <div class="modal-body" id="detail-description-${todo.id}">
+                    ${todo.description}
+                </div>
+                <div class="modal-footer">
+                    
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    
+                    <button class="btn btn-success set-status" data-index=${todo.id}>Completed <i class="bi bi-check2"></i></button>
+                    
+                </div>
+                </div>
+            </div>
+        </div>
+        `);
+
+        updateModals.append(`
+        <div class="modal fade" id="todo-update-${todo.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="">Update todo</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                        <div class="mb-3">
+                            <label for="title-${todo.id}" class="col-form-label">Title</label>
+                            <input type="text" class="form-control" id="title-${todo.id}" value="${todo.title}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="description-${todo.id}" class="col-form-label">Description:</label>
+                            <textarea class="form-control" id="description-${todo.id}" >${todo.description}</textarea>
+                        </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" data-index=${todo.id} data-bs-dismiss="modal" data-bs-toggle="modal">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `)
+        
+        todoList.append(`
+        <div id="todo-item-${todo.id}" class="d-flex justify-content-between w-100 rounded p-2 border border-2 border-primary">
+            <div class="d-flex align-items-center gap-2">
+                <span id="item-title-${todo.id}">${todo.title}</span>
+                <span class="badge bg-primary">now</span>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#todo-detail-${todo.id}">View</button>
+                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#todo-update-${todo.id}"><i class="bi bi-pencil"></i></button>
+                <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#todo-${todo.id}"><i class="bi bi-trash"></i></button>
+                
+                <button class="btn btn-sm btn-success set-status" data-index="${todo.id}"><i class="bi bi-check2"></i></button>
+            </div>
+        </div>
+        `)
+
+    };
+
+
+    const updateTodo = (todo)=>{
+        const detailTitle = $(`#detail-title-${todo.id}`);
+        const detailDescription = $(`#detail-description-${todo.id}`)
+        const itemTitle = $(`#item-title-${todo.id}`);
+
+        detailTitle.html(todo.title);
+        
+        detailDescription.html(todo.description);
+        itemTitle.html(todo.title);
+    }
+
+
+    const addAlert = (type, message)=>{
+        $('.alert-hub').append(`
+            <div class="alert alert-${type} alert-dismissible" role="alert">
+                <div>${ message }</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        `);
+    };
+
+    const cleanInput = ()=>{
+        $('#create-title-input').val("");
+        $('#create-description-input').val("");
+    }
+
+    $(document).on('click', '.set-status', function(e){
+        e.preventDefault();
+        const todoId = $(this).data('index');
+        const todoItemStatus = $(this); 
+        
+        $.ajax({
+            url : `/todo/set-status/${todoId}/`,
+            method : 'POST',
+            data : {
+                'csrfmiddlewaretoken' : '{{csrf_token}}'
+            },
+            success : function(res){
+                todoItemStatus.parent('.modal-footer').append(`
+                <span class="badge badge-lg text-bg-warning">now</span>
+                `)
+                todoItemStatus.remove();
+                const message = 'change status successfully !.';
+                addAlert('success',message)
+            },
+            error : function(xhr, errmg,err){
+                const message = 'something went wrong';
+                addAlert('danger', message)
+            }
+        })
+    });
+
+    $(document).on('click', '.delete-todo', function(e){
+        e.preventDefault();
+        const todoId = $(this).data('index');
+
+        $.ajax({
+            url : `/todo/delete/${todoId}/`,
+            method : 'POST',
+            data : {
+                'csrfmiddlewaretoken' : '{{csrf_token}}',
+            },
+            success : function(res){
+                deleteTodo(todoId);
+            },
+            error : function(xhr, errmg, err){
+                const message = 'something went wrong';
+                addAlert('danger', message);
+            }
+        })
+
+    })
+
+    $(document).on('submit' ,'#add-submit-todo', function(e){
+        e.preventDefault();
+        $("#creat-todo-modal-close").click();
+        const todo = {'title':$("#create-title-input").val(),'description':$("#create-description-input").val(),id:null};
+        cleanInput();
+
+        $.ajax({
+            url : "{% url 'todo:create_todo' %}",
+            method : "POST",
+            data : {
+                title : todo.title,
+                description : todo.description,
+                csrfmiddlewaretoken : "{{csrf_token}}"
+            },
+            success : function(res){
+                todo['id'] = res.todo_id
+                addTodo(todo);
+                addAlert('success',"Todo added successfully .");
+            },
+            error : function(xhr, errmg, err){
+                addAlert('danger',"something went wrong")
+            }
+        })
+    });
+
+    $(document).on('click','.update-submit', function(e){
+        e.preventDefault();
+        const todoId = $(this).data('index');
+
+        const todo ={'title':$(`#title-${todoId}`).val(),'description':$(`#description-${todoId}`).val(),id:todoId}
+        $.ajax({
+            url : `/todo/update/${todoId}/`,
+            method : 'POST',
+            data : {
+                title : todo.title,
+                description : todo.description,
+                csrfmiddlewaretoken : "{{csrf_token}}"
+            },
+            success : function(res){
+                updateTodo(todo);
+                addAlert('info',"todo successfuly updated !");
+            },
+            error : function(xhr, errmg, err){
+                addAlert('danger',"something went wrong")
+            }
+        })
+    })
+</script>
+
 {% endblock content %}
     
