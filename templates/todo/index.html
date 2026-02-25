@@ -8,8 +8,9 @@
                     <div class="card shadow">
                         <div class="card-header d-flex pt-4 justify-content-between">
                             <h2>Todo App</h2>
-                            <ul class="d-flex gap-5" style="list-style-type: none;">
+                            <ul class="d-flex gap-2" style="list-style-type: none;">
                                 <li><button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-todo-modal">Todo <i class="bi bi-plus-square-fill"></i></button></li>
+                                <li><a href="{% url 'accounts:logout_user' %}" class="btn  btn-danger" >Logout <i class="bi bi-box-arrow-right"></i></a></li>
                             </ul>
                         </div>
                         <div class="card-body todo-items d-flex flex-column-reverse align-items-start gap-2">
@@ -256,7 +257,6 @@
         <div id="todo-item-${todo.id}" class="d-flex justify-content-between w-100 rounded p-2 border border-2 border-primary">
             <div class="d-flex align-items-center gap-2">
                 <span id="item-title-${todo.id}">${todo.title}</span>
-                <span class="badge bg-primary">now</span>
             </div>
             <div class="d-flex align-items-center gap-2">
                 <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#todo-detail-${todo.id}">View</button>
