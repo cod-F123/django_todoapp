@@ -11,34 +11,27 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
-from dotenv import load_dotenv
+from decouple import config
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-
-load_dotenv(BASE_DIR/'.env')
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(int(os.getenv('DEBUG')))
+DEBUG = config("DEBUG", cast=bool, default=True)
 
-ALLOWED_HOSTS = []
-for allowed_host in os.getenv('ALLOWED_HOSTS','').split(','):
-    if allowed_host.strip():
-        ALLOWED_HOSTS.append(allowed_host.strip())
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=lambda hs: [
+                       h.strip() for h in hs.split(",")], default="*")
 
-CSRF_TRUSTED_ORIGINS = []
-for csrf_trusted_origin in os.getenv('CSRF_TRUSTED_ORIGINS','').split(','):
-    if csrf_trusted_origin.strip():
-        CSRF_TRUSTED_ORIGINS.append(csrf_trusted_origin.strip())
+CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", cast=lambda tos: [
+                              to.strip() for to in tos.split(",")], default="htt://localhost:8000")
 
 
 # Application definition
@@ -56,7 +49,6 @@ INSTALLED_APPS = [
 ]
 
 
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -70,8 +62,7 @@ MIDDLEWARE = [
 if DEBUG:
     INSTALLED_APPS += ['debug_toolbar',]
     MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware',]
-    
-    
+
 
 ROOT_URLCONF = 'core.urls'
 
@@ -128,7 +119,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = config("TIME_ZONE", default="UTC")
 
 USE_I18N = True
 
@@ -142,10 +133,6 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR/'static',
 ]
-
-
-
-
 
 
 # Debug Toolbar config
